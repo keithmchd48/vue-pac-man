@@ -29,13 +29,18 @@ export default {
    'pinky ghost' : ind === pinky.currentIndex,
    'inky ghost' : ind === inky.currentIndex,
    'clyde ghost' : ind === clyde.currentIndex,
-   'scared-ghost' : isScared
+   'scared-ghost' : isScared,
+   'up' : (ind === pacmanCurrentIndex && faceUp),
+   'down' :  (ind === pacmanCurrentIndex && faceDown),
+   'right' : (ind === pacmanCurrentIndex && faceRight),
+   'left' : (ind === pacmanCurrentIndex && faceLeft)
    }">
 </div>
 <h3>Score: <span id="score">{{score}}</span></h3>
 </div>`,
   data () {
     return {
+      pacmanFace: 'd',
       layout: [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -97,6 +102,18 @@ export default {
     },
     allGhostPositions () {
       return [this.blinky.currentIndex, this.pinky.currentIndex, this.inky.currentIndex, this.clyde.currentIndex]
+    },
+    faceUp () {
+      return this.pacmanFace === 'w'
+    },
+    faceDown () {
+      return this.pacmanFace === 's'
+    },
+    faceRight () {
+      return this.pacmanFace === 'd'
+    },
+    faceLeft () {
+      return this.pacmanFace === 'a'
     }
   },
   methods: {
@@ -104,6 +121,7 @@ export default {
       // "keyCode" is deprecated in some browsers
       const codeForPress = this.dispatchForCode(e)
       if (codeForPress === 37 || codeForPress ==='ArrowLeft') {
+        this.pacmanFace = 'a'
         if (this.pacmanCurrentIndex % WIDTH !== 0 && this.layout[this.pacmanCurrentIndex - 1] !== 1 && this.layout[this.pacmanCurrentIndex - 1] !== 2) {
           this.pacmanCurrentIndex -= 1
         }
@@ -111,11 +129,13 @@ export default {
         if (this.pacmanCurrentIndex - 1 === 363) this.pacmanCurrentIndex = 391
       }
       if (codeForPress === 38 || codeForPress ==='ArrowUp') {
+        this.pacmanFace = 'w'
         if (this.pacmanCurrentIndex - WIDTH >= 0 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 2) {
           this.pacmanCurrentIndex -= WIDTH
         }
       }
       if (codeForPress === 39 || codeForPress ==='ArrowRight') {
+        this.pacmanFace = 'd'
         if (this.pacmanCurrentIndex % WIDTH < WIDTH - 1 && this.layout[this.pacmanCurrentIndex + 1] !== 1 && this.layout[this.pacmanCurrentIndex + 1] !== 2) {
           this.pacmanCurrentIndex += 1
         }
@@ -123,6 +143,7 @@ export default {
         if (this.pacmanCurrentIndex + 1 === 392) this.pacmanCurrentIndex = 364
       }
       if (codeForPress === 40 || codeForPress ==='ArrowDown') {
+        this.pacmanFace = 's'
         if (this.pacmanCurrentIndex + WIDTH < WIDTH * WIDTH && this.layout[this.pacmanCurrentIndex + WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex + WIDTH] !== 2) {
           this.pacmanCurrentIndex += WIDTH
         }

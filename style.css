@@ -37,24 +37,58 @@
 
 .blinky {
     background-color: red;
-    border: 0px;
+    border: 0;
+    border-radius: 0;
 }
 .pinky {
     background-color: pink;
-    border: 0px;
+    border: 0;
+    border-radius: 0;
 }
 .inky {
     background-color: cyan;
-    border: 0px;
+    border: 0;
+    border-radius: 0;
 }
 .clyde {
     background-color: orange;
-    border: 0px;
+    border: 0;
+    border-radius: 0;
 }
 .pac-man {
-    background-color: #ffff00;
-    border-radius: 50%;
+    position: relative;
 }
+.pac-man.right {
+    transform: rotate(0deg);
+}
+.pac-man.left {
+    transform: rotate(180deg);
+}
+.pac-man.up {
+    transform: rotate(-90deg);
+}
+.pac-man.down {
+    transform: rotate(90deg);
+}
+.pac-man::before, .pac-man::after {
+    content: "";
+    display: block;
+    height: 0;
+    width: 0;
+    position: absolute;
+    border-radius: 50%;
+    border: solid 12px yellow;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    animation: mouth-top 0.7s ease infinite;
+}
+.pac-man::after {
+    border-color: yellow;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    animation: mouth-bottom 0.7s ease infinite;
+}
+
 
 .blinky.scared-ghost {
     background-color: aquamarine;
@@ -69,3 +103,14 @@
     background-color: aquamarine;
 }
 
+@keyframes mouth-top {
+    50% {
+        transform: rotate(44deg);
+    }
+}
+
+@keyframes mouth-bottom {
+    50% {
+        transform: rotate(-44deg);
+    }
+}
