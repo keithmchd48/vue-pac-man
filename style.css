@@ -1,7 +1,11 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
 .body-wrapper {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     margin: 0 auto;
     width: 70vw;
     height: 100vh;
@@ -18,7 +22,25 @@
     width: 25px;
     height: 25px;
 }
-
+.button {
+    border-radius: 6px;
+    background-color: lawngreen;
+    color: black;
+    padding: 5px 10px;
+    cursor: pointer;
+    outline: none;
+    border: 1px solid green;
+    transition: transform 0.1s linear;
+}
+.button:hover {
+    transform: scale(1.07);
+}
+.time-interval {
+    font-size: 20px;
+}
+.color-stop {
+    color: red;
+}
 .pac-dot {
     background-color: green;
     border: 5px solid white;

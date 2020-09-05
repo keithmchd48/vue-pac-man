@@ -17,6 +17,11 @@ const WIDTH = 28 //28 x 28 = 784 squares
 export default {
   name: 'GridWrapper',
   template: `
+<div class="body-wrapper">
+  <div>
+  <button v-show="!started" type="button" @click="start" class="button">START</button>
+    <h3>Score: <span id="score">{{score}}</span></h3>
+  </div>
 <div class="grid">
   <div v-for="(lay, ind) in layout" :key="ind"
    :class="{
@@ -35,12 +40,21 @@ export default {
    'right' : (ind === pacmanCurrentIndex && faceRight),
    'left' : (ind === pacmanCurrentIndex && faceLeft)
    }">
-   <div v-show="allGhostPositions.includes(ind)" class="eyes"></div>
+    <div v-show="allGhostPositions.includes(ind)" class="eyes"></div>
+  </div>
 </div>
-<h3>Score: <span id="score">{{score}}</span></h3>
-</div>`,
+  <div class="time-interval">
+    Your time:
+    <div :class="{'color-stop' : gameOver}">{{minutesSeconds}}</div> 
+  </div>
+</div>
+`,
   data () {
     return {
+      time: 0,
+      timeInterval: null,
+      gameOver: false,
+      started: false,
       pacmanFace: 'd',
       layout: [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -83,11 +97,6 @@ export default {
       isScared: false
     }
   },
-  mounted () {
-    document.addEventListener('keyup', this.movePacman)
-    // move the ghosts randomly
-    this.ghosts.forEach(ghost => this.moveGhost(ghost))
-  },
   computed: {
     blinky () {
       return this.ghosts[0]
@@ -115,9 +124,25 @@ export default {
     },
     faceLeft () {
       return this.pacmanFace === 'a'
+    },
+    minutesSeconds () {
+      let minutes = Math.floor(this.time / 60)
+      let seconds = Math.floor(this.time % 60)
+      minutes = minutes < 10 ? `0${minutes}` : `${minutes}`
+      seconds = seconds < 10 ? `0${seconds}` : `${seconds}`
+      return `${minutes}:${seconds}`
     }
   },
   methods: {
+    start () {
+      this.timeInterval = setInterval(() => {
+        this.time += 1
+      }, 1000)
+      this.started = true
+      document.addEventListener('keyup', this.movePacman)
+      // move the ghosts randomly
+      this.ghosts.forEach(ghost => this.moveGhost(ghost))
+    },
     movePacman(e) {
       // "keyCode" is deprecated in some browsers
       const codeForPress = this.dispatchForCode(e)
@@ -152,6 +177,7 @@ export default {
       this.pacDotEaten()
       this.powerPelletEaten()
       this.checkForGameOver()
+      this.checkForMaxTime()
       this.checkForWin()
     },
     moveGhost (ghost) {
@@ -174,7 +200,13 @@ export default {
         }
         this.checkForWin()
         this.checkForGameOver()
+        this.checkForMaxTime()
       }, ghost.speed)
+    },
+    checkForMaxTime () {
+      if (this.time / 60 >= 4) {
+        clearInterval(this.timeInterval)
+      }
     },
     pacDotEaten () {
       if (this.layout[this.pacmanCurrentIndex] === 0) {
@@ -198,7 +230,8 @@ export default {
         this.ghosts.forEach(ghost => clearInterval(ghost.timerId))
         // stop movment of pacman
         document.removeEventListener('keyup', this.movePacman)
-        this.score = "GAME OVER"
+        clearInterval(this.timeInterval)
+        this.gameOver = true
       }
     },
     checkForWin() {
@@ -207,7 +240,8 @@ export default {
         this.ghosts.forEach(ghost => clearInterval(ghost.timerId))
         // stop movment of pacman
         document.removeEventListener('keyup', this.movePacman)
-        this.score = "YOU WIN"
+        clearInterval(this.timeInterval)
+        this.gameOver = true
       }
     },
     dispatchForCode (event) {
