@@ -35,6 +35,7 @@ export default {
    'right' : (ind === pacmanCurrentIndex && faceRight),
    'left' : (ind === pacmanCurrentIndex && faceLeft)
    }">
+   <div v-show="allGhostPositions.includes(ind)" class="eyes"></div>
 </div>
 <h3>Score: <span id="score">{{score}}</span></h3>
 </div>`,
@@ -191,14 +192,20 @@ export default {
     },
     checkForGameOver () {
       if (this.allGhostPositions.includes(this.pacmanCurrentIndex) && !this.isScared) {
+        // make the pac man disappear
+        this.pacmanCurrentIndex = -1
+        // stop movement of all ghosts
         this.ghosts.forEach(ghost => clearInterval(ghost.timerId))
+        // stop movment of pacman
         document.removeEventListener('keyup', this.movePacman)
         this.score = "GAME OVER"
       }
     },
     checkForWin() {
       if (!this.layout.includes(0)) {
+        // stop movement of all ghosts
         this.ghosts.forEach(ghost => clearInterval(ghost.timerId))
+        // stop movment of pacman
         document.removeEventListener('keyup', this.movePacman)
         this.score = "YOU WIN"
       }
