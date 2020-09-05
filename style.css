@@ -10,19 +10,20 @@
 .grid {
     display: flex;
     flex-wrap: wrap;
-    width: 560px;
-    height: 560px;
+    width: 700px;
+    height: 700px;
     border: solid black;
 }
 .grid div {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
 }
 
 .pac-dot {
     background-color: green;
     border: 5px solid white;
     box-sizing: border-box;
+    border-radius: 50%;
 }
 
 .wall {
@@ -31,7 +32,7 @@
 
 .power-pellet {
     background-color: green;
-    border-radius: 10px;
+    border-radius: 50%;
 }
 
 .blinky {
@@ -51,8 +52,8 @@
     border: 0px;
 }
 .pac-man {
-    background-color: yellow;
-    border-radius: 10px;
+    background-color: #ffff00;
+    border-radius: 50%;
 }
 
 .blinky.scared-ghost {
