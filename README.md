@@ -1,3 +1,2 @@
 # Pac Man
-## Hosted on 
-https://keith-pacman.netlify.app/
+## Hosted on https://keith-pacman.netlify.app/
