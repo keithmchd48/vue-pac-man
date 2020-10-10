@@ -132,6 +132,18 @@ export default {
       minutes = minutes < 10 ? `0${minutes}` : `${minutes}`
       seconds = seconds < 10 ? `0${seconds}` : `${seconds}`
       return `${minutes}:${seconds}`
+    },
+    doIMoveLeft () {
+      return this.pacmanCurrentIndex % WIDTH !== 0 && this.layout[this.pacmanCurrentIndex - 1] !== 1 && this.layout[this.pacmanCurrentIndex - 1] !== 2
+    },
+    doIMoveUpwards () {
+      return this.pacmanCurrentIndex - WIDTH >= 0 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 2
+    },
+    doIMoveRight () {
+      return this.pacmanCurrentIndex % WIDTH < WIDTH - 1 && this.layout[this.pacmanCurrentIndex + 1] !== 1 && this.layout[this.pacmanCurrentIndex + 1] !== 2
+    },
+    doIMoveDown () {
+      return this.pacmanCurrentIndex + WIDTH < WIDTH * WIDTH && this.layout[this.pacmanCurrentIndex + WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex + WIDTH] !== 2
     }
   },
   methods: {
@@ -149,22 +161,22 @@ export default {
       // "keyCode" is deprecated in some browsers
       const codeForPress = this.dispatchForCode(e)
       if (codeForPress === 37 || codeForPress ==='ArrowLeft') {
-        if (this.pacmanCurrentIndex % WIDTH !== 0 && this.layout[this.pacmanCurrentIndex - 1] !== 1 && this.layout[this.pacmanCurrentIndex - 1] !== 2) {
+        if (this.doIMoveLeft) {
           this.setDirection = 'left'
         }
       }
       if (codeForPress === 38 || codeForPress ==='ArrowUp') {
-        if (this.pacmanCurrentIndex - WIDTH >= 0 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 2) {
+        if (this.doIMoveUpwards) {
           this.setDirection = 'upwards'
         }
       }
       if (codeForPress === 39 || codeForPress ==='ArrowRight') {
-        if (this.pacmanCurrentIndex % WIDTH < WIDTH - 1 && this.layout[this.pacmanCurrentIndex + 1] !== 1 && this.layout[this.pacmanCurrentIndex + 1] !== 2) {
+        if (this.doIMoveRight) {
           this.setDirection = 'right'
         }
       }
       if (codeForPress === 40 || codeForPress ==='ArrowDown') {
-        if (this.pacmanCurrentIndex + WIDTH < WIDTH * WIDTH && this.layout[this.pacmanCurrentIndex + WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex + WIDTH] !== 2) {
+        if (this.doIMoveDown) {
           this.setDirection = 'down'
         }
       }
@@ -173,7 +185,7 @@ export default {
       setInterval(() => {
         if (this.setDirection === 'left') {
           this.pacmanFace = 'a'
-          if (this.pacmanCurrentIndex % WIDTH !== 0 && this.layout[this.pacmanCurrentIndex - 1] !== 1 && this.layout[this.pacmanCurrentIndex - 1] !== 2) {
+          if (this.doIMoveLeft) {
             this.pacmanCurrentIndex -= 1
           }
           // left exit
@@ -181,13 +193,13 @@ export default {
         }
         if (this.setDirection === 'upwards') {
           this.pacmanFace = 'w'
-          if (this.pacmanCurrentIndex - WIDTH >= 0 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 2) {
+          if (this.doIMoveUpwards) {
             this.pacmanCurrentIndex -= WIDTH
           }
         }
         if (this.setDirection === 'right') {
           this.pacmanFace = 'd'
-          if (this.pacmanCurrentIndex % WIDTH < WIDTH - 1 && this.layout[this.pacmanCurrentIndex + 1] !== 1 && this.layout[this.pacmanCurrentIndex + 1] !== 2) {
+          if (this.doIMoveRight) {
             this.pacmanCurrentIndex += 1
           }
           // right exit
@@ -195,7 +207,7 @@ export default {
         }
         if (this.setDirection === 'down') {
           this.pacmanFace = 's'
-          if (this.pacmanCurrentIndex + WIDTH < WIDTH * WIDTH && this.layout[this.pacmanCurrentIndex + WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex + WIDTH] !== 2) {
+          if (this.doIMoveDown) {
             this.pacmanCurrentIndex += WIDTH
           }
         }
