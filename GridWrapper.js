@@ -20,7 +20,7 @@ export default {
 <div class="body-wrapper">
   <div>
   <button v-show="!started" type="button" @click="start" class="button">START</button>
-    <h3>Score: <span id="score">{{score}}</span></h3>
+    <h3 class="score-board">Score: <span id="score">{{score}}</span></h3>
   </div>
 <div class="grid">
   <div v-for="(lay, ind) in layout" :key="ind"

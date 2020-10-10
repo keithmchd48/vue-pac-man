@@ -1,5 +1,6 @@
 body {
     font-family: 'Roboto', sans-serif;
+    background-color: black;
 }
 
 .body-wrapper {
@@ -35,25 +36,28 @@ body {
 .button:hover {
     transform: scale(1.07);
 }
-.time-interval {
+.time-interval, .score-board {
     font-size: 20px;
+    color: white;
 }
 .color-stop {
     color: red;
 }
 .pac-dot {
-    background-color: green;
-    border: 5px solid white;
+    background-color: yellow;
+    border: 8px solid black;
     box-sizing: border-box;
     border-radius: 50%;
 }
 
 .wall {
-    background-color: black;
+    background-color: rgb(8, 14, 102);
 }
 
 .power-pellet {
-    background-color: gold;
+    box-sizing: border-box;
+    border: 4px solid black;
+    background-color: rgb(14, 233, 14);
     border-radius: 50%;
 }
 
@@ -100,13 +104,13 @@ body {
     width: 0;
     position: absolute;
     border-radius: 50%;
-    border: solid 12px #0099ff;
+    border: solid 12px yellow;
     border-right-color: transparent;
     border-bottom-color: transparent;
     animation: mouth-top 0.7s ease infinite;
 }
 .pac-man::after {
-    border-color: #0099ff;
+    border-color: yellow;
     border-right-color: transparent;
     border-top-color: transparent;
     animation: mouth-bottom 0.7s ease infinite;
