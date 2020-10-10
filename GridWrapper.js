@@ -18,36 +18,34 @@ export default {
   name: 'GridWrapper',
   template: `
 <div class="body-wrapper">
-  <div>
-  <button v-show="!started" type="button" @click="start" class="button">START</button>
+  <div class="grid">
+    <div v-for="(lay, ind) in layout" :key="ind"
+     :class="{
+     'pac-dot': lay === 0,
+     'wall': lay === 1,
+     'ghost-lair': lay === 2, 
+     'power-pellet' : lay === 3,
+     'pac-man' : ind === pacmanCurrentIndex,
+     'blinky ghost' : ind === blinky.currentIndex,
+     'pinky ghost' : ind === pinky.currentIndex,
+     'inky ghost' : ind === inky.currentIndex,
+     'clyde ghost' : ind === clyde.currentIndex,
+     'scared-ghost' : isScared,
+     'up' : (ind === pacmanCurrentIndex && faceUp),
+     'down' :  (ind === pacmanCurrentIndex && faceDown),
+     'right' : (ind === pacmanCurrentIndex && faceRight),
+     'left' : (ind === pacmanCurrentIndex && faceLeft)
+     }">
+      <div v-show="allGhostPositions.includes(ind)" class="eyes"></div>
+    </div>
+  </div>
+  <div class="time-score-wrapper">
     <h3 class="score-board">Score: <span id="score">{{score}}</span></h3>
+    <h3 class="time-interval">
+      Your time:<span :class="{'color-stop' : gameOver}">{{minutesSeconds}}</span> 
+    </h3>
   </div>
-<div class="grid">
-  <div v-for="(lay, ind) in layout" :key="ind"
-   :class="{
-   'pac-dot': lay === 0,
-   'wall': lay === 1,
-   'ghost-lair': lay === 2, 
-   'power-pellet' : lay === 3,
-   'pac-man' : ind === pacmanCurrentIndex,
-   'blinky ghost' : ind === blinky.currentIndex,
-   'pinky ghost' : ind === pinky.currentIndex,
-   'inky ghost' : ind === inky.currentIndex,
-   'clyde ghost' : ind === clyde.currentIndex,
-   'scared-ghost' : isScared,
-   'up' : (ind === pacmanCurrentIndex && faceUp),
-   'down' :  (ind === pacmanCurrentIndex && faceDown),
-   'right' : (ind === pacmanCurrentIndex && faceRight),
-   'left' : (ind === pacmanCurrentIndex && faceLeft)
-   }">
-    <div v-show="allGhostPositions.includes(ind)" class="eyes"></div>
-  </div>
-</div>
-  <div class="time-interval">
-    Your time:
-    <div :class="{'color-stop' : gameOver}">{{minutesSeconds}}</div> 
-  </div>
-</div>
+ </div>
 `,
   data () {
     return {
