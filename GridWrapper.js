@@ -17,7 +17,12 @@ const WIDTH = 28 //28 x 28 = 784 squares
 export default {
   name: 'GridWrapper',
   template: `
-<div class="body-wrapper">
+<div v-if="!started" class="overlay-screen" id="start-screen">
+  <h1>PACMAN</h1>
+  <h2 id="start-msg">Press ENTER to start</h2>
+  <h2>Use arrow keys to move</h2>
+</div>
+<div v-if="started" class="body-wrapper">
   <div class="grid">
     <div v-for="(lay, ind) in layout" :key="ind"
      :class="{
@@ -47,6 +52,10 @@ export default {
   </div>
  </div>
 `,
+  created () {
+    // start the game when "Enter" key is pressed
+    document.addEventListener('keydown', this.startGame)
+  },
   data () {
     return {
       time: 0,
@@ -145,15 +154,18 @@ export default {
     }
   },
   methods: {
-    start () {
-      this.timeInterval = setInterval(() => {
-        this.time += 1
-      }, 1000)
-      this.started = true
-      document.addEventListener('keyup', this.setVelocity)
-      this.movePacman()
-      // move the ghosts randomly
-      this.ghosts.forEach(ghost => this.moveGhost(ghost))
+    startGame (evn) {
+      let keyEnter = this.dispatchForCode(evn)
+      if (keyEnter === 13 || keyEnter === "Enter") {
+        this.started = true
+        this.timeInterval = setInterval(() => {
+          this.time += 1
+        }, 1000)
+        document.addEventListener('keyup', this.setVelocity)
+        this.movePacman()
+        // move the ghosts randomly
+        this.ghosts.forEach(ghost => this.moveGhost(ghost))
+      }
     },
     setVelocity (e) {
       // "keyCode" is deprecated in some browsers

@@ -1,7 +1,7 @@
 import GridWrapper from './GridWrapper.js';
-new Vue({
-  el: '#app',
+
+Vue.createApp({
   components: {
     GridWrapper
   }
-})
+}).mount('#app')
