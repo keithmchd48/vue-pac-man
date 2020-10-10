@@ -52,6 +52,7 @@ export default {
   data () {
     return {
       time: 0,
+      setDirection: '',
       timeInterval: null,
       gameOver: false,
       started: false,
@@ -139,46 +140,71 @@ export default {
         this.time += 1
       }, 1000)
       this.started = true
-      document.addEventListener('keyup', this.movePacman)
+      document.addEventListener('keyup', this.setVelocity)
+      this.movePacman()
       // move the ghosts randomly
       this.ghosts.forEach(ghost => this.moveGhost(ghost))
     },
-    movePacman(e) {
+    setVelocity (e) {
       // "keyCode" is deprecated in some browsers
       const codeForPress = this.dispatchForCode(e)
       if (codeForPress === 37 || codeForPress ==='ArrowLeft') {
-        this.pacmanFace = 'a'
         if (this.pacmanCurrentIndex % WIDTH !== 0 && this.layout[this.pacmanCurrentIndex - 1] !== 1 && this.layout[this.pacmanCurrentIndex - 1] !== 2) {
-          this.pacmanCurrentIndex -= 1
+          this.setDirection = 'left'
         }
-        // left exit
-        if (this.pacmanCurrentIndex - 1 === 363) this.pacmanCurrentIndex = 391
       }
       if (codeForPress === 38 || codeForPress ==='ArrowUp') {
-        this.pacmanFace = 'w'
         if (this.pacmanCurrentIndex - WIDTH >= 0 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 2) {
-          this.pacmanCurrentIndex -= WIDTH
+          this.setDirection = 'upwards'
         }
       }
       if (codeForPress === 39 || codeForPress ==='ArrowRight') {
-        this.pacmanFace = 'd'
         if (this.pacmanCurrentIndex % WIDTH < WIDTH - 1 && this.layout[this.pacmanCurrentIndex + 1] !== 1 && this.layout[this.pacmanCurrentIndex + 1] !== 2) {
-          this.pacmanCurrentIndex += 1
+          this.setDirection = 'right'
         }
-        // right exit
-        if (this.pacmanCurrentIndex + 1 === 392) this.pacmanCurrentIndex = 364
       }
       if (codeForPress === 40 || codeForPress ==='ArrowDown') {
-        this.pacmanFace = 's'
         if (this.pacmanCurrentIndex + WIDTH < WIDTH * WIDTH && this.layout[this.pacmanCurrentIndex + WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex + WIDTH] !== 2) {
-          this.pacmanCurrentIndex += WIDTH
+          this.setDirection = 'down'
         }
       }
-      this.pacDotEaten()
-      this.powerPelletEaten()
-      this.checkForGameOver()
-      this.checkForMaxTime()
-      this.checkForWin()
+    },
+    movePacman() {
+      setInterval(() => {
+        if (this.setDirection === 'left') {
+          this.pacmanFace = 'a'
+          if (this.pacmanCurrentIndex % WIDTH !== 0 && this.layout[this.pacmanCurrentIndex - 1] !== 1 && this.layout[this.pacmanCurrentIndex - 1] !== 2) {
+            this.pacmanCurrentIndex -= 1
+          }
+          // left exit
+          if (this.pacmanCurrentIndex - 1 === 363) this.pacmanCurrentIndex = 391
+        }
+        if (this.setDirection === 'upwards') {
+          this.pacmanFace = 'w'
+          if (this.pacmanCurrentIndex - WIDTH >= 0 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex - WIDTH] !== 2) {
+            this.pacmanCurrentIndex -= WIDTH
+          }
+        }
+        if (this.setDirection === 'right') {
+          this.pacmanFace = 'd'
+          if (this.pacmanCurrentIndex % WIDTH < WIDTH - 1 && this.layout[this.pacmanCurrentIndex + 1] !== 1 && this.layout[this.pacmanCurrentIndex + 1] !== 2) {
+            this.pacmanCurrentIndex += 1
+          }
+          // right exit
+          if (this.pacmanCurrentIndex + 1 === 392) this.pacmanCurrentIndex = 364
+        }
+        if (this.setDirection === 'down') {
+          this.pacmanFace = 's'
+          if (this.pacmanCurrentIndex + WIDTH < WIDTH * WIDTH && this.layout[this.pacmanCurrentIndex + WIDTH] !== 1 && this.layout[this.pacmanCurrentIndex + WIDTH] !== 2) {
+            this.pacmanCurrentIndex += WIDTH
+          }
+        }
+        this.pacDotEaten()
+        this.powerPelletEaten()
+        this.checkForGameOver()
+        this.checkForMaxTime()
+        this.checkForWin()
+      }, 200)
     },
     moveGhost (ghost) {
       const directions = [+1, -1, +WIDTH, -WIDTH]
@@ -229,7 +255,7 @@ export default {
         // stop movement of all ghosts
         this.ghosts.forEach(ghost => clearInterval(ghost.timerId))
         // stop movment of pacman
-        document.removeEventListener('keyup', this.movePacman)
+        document.removeEventListener('keyup', this.setVelocity)
         clearInterval(this.timeInterval)
         this.gameOver = true
       }
@@ -239,7 +265,7 @@ export default {
         // stop movement of all ghosts
         this.ghosts.forEach(ghost => clearInterval(ghost.timerId))
         // stop movment of pacman
-        document.removeEventListener('keyup', this.movePacman)
+        document.removeEventListener('keyup', this.setVelocity)
         clearInterval(this.timeInterval)
         this.gameOver = true
       }
